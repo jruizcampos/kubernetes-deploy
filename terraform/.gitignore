@@ -2,3 +2,5 @@ credentials.tf
 credentials.tf.secret
 credentials.tf.clear
 .terraform*
+terraform.tfstate
+terraform.tfstate.backup
