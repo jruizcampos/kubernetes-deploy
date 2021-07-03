@@ -1,12 +1,12 @@
 [all:vars]
-ansible_user=<YOUR ANSIBLE USER>
+ansible_user=adminUsername
 
 [master]
-master
+master ansible_host=10.10.2.181
 
 [workers]
-worker1
-worker2
+worker1 ansible_host=10.10.2.181
+worker2 ansible_host=10.10.2.181
 
 [nfs]
-nfs
+nfs ansible_host=10.10.2.181
