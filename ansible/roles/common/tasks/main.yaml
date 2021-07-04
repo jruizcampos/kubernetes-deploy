@@ -1,0 +1,18 @@
+---
+
+# Actualizando los paquetes del Sistema
+- name: Upgrade all packages
+  dnf:
+    name: "*"
+    state: latest
+  become: yes
+  when: ansible_os_family == 'RedHat'
+
+# Instalando Chrony
+- name: Install Chrony (Red Hat/Centos)
+  dnf:
+    name: chrony
+    state: present
+  become: yes
+  when: ansible_os_family == 'RedHat'
+  
