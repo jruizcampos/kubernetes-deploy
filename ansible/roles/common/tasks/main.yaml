@@ -34,7 +34,12 @@
     state: disabled
   become: yes
 
-- name: Add IP address of all hosts to all hosts
+- name: Configuramos el hostname
+  hostname:
+    name: "{{inventory_hostname}}.{{kubernets_domain}}"
+  become: yes
+
+- name: Agregamos los DNS de los demás hosts
   lineinfile:
     dest: /etc/hosts
     regexp: '.*{{ item }}$'
