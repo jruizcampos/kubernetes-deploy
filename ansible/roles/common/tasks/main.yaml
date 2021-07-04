@@ -17,7 +17,7 @@
 # Yo soy de Lima/Perú ;)
 - name: Configurando el timezone a America/Lima
   timezone:
-    name: Asia/Tokyo
+    name: America/Lima
   become: yes
   
 - name: Habilitar servicio Chronyd (Red Hat)
