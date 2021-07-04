@@ -1,0 +1,10 @@
+---
+
+- name: Realizando configuraciones comunes a todos los nodos
+  hosts: all
+  vars_files:
+    - "group_vars/common.yaml"
+  gather_facts: false
+  roles:
+    - common
+    

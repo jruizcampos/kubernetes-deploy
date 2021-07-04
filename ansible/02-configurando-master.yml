@@ -1,0 +1,10 @@
+---
+
+- name: Realizando configuraciones en los masters
+  hosts: master
+  vars_files:
+    - "group_vars/master.yaml"
+  gather_facts: false
+  roles:
+    - master
+    

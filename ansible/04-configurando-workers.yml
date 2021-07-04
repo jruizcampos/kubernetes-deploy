@@ -1,0 +1,10 @@
+---
+
+- name: Realizando configuraciones en los Workers
+  hosts: workers
+  vars_files:
+    - "group_vars/workers.yaml"
+  gather_facts: false
+  roles:
+    - workers
+    
