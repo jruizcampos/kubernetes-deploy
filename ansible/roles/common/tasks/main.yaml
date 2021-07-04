@@ -35,6 +35,7 @@
   become: yes
 
 - name: Configuramos el hostname
+  hosts: master:workers
   hostname:
     name: "{{inventory_hostname}}.{{kubernets_domain}}"
   become: yes
