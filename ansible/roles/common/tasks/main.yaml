@@ -18,7 +18,8 @@
 - name: Configurando el timezone a America/Lima
   timezone:
     name: Asia/Tokyo
-
+  become: yes
+  
 - name: Habilitar servicio Chronyd (Red Hat)
   systemd:
     name: chronyd
