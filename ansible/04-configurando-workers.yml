@@ -4,7 +4,7 @@
   hosts: workers
   vars_files:
     - "group_vars/workers.yaml"
-  gather_facts: false
+  gather_facts: true
   roles:
     - workers
     

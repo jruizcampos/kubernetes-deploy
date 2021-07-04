@@ -4,7 +4,7 @@
   hosts: nfs
   vars_files:
     - "group_vars/nfs.yaml"
-  gather_facts: false
+  gather_facts: true
   roles:
     - nfs
     
