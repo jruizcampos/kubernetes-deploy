@@ -33,11 +33,11 @@
   selinux:
     state: disabled
   become: yes
-
+  
 - name: Configuramos el hostname
-  hosts: master:workers
   hostname:
     name: "{{inventory_hostname}}.{{kubernets_domain}}"
+  when: inventory_hostname is regex("work*|master*")
   become: yes
 
 - name: Agregamos los DNS de los demás hosts
