@@ -29,3 +29,8 @@
   become: yes
   when: ansible_os_family == 'RedHat'
 
+- name: Deshabilitamos SELinux
+  selinux:
+    state: disabled
+  become: yes
+  
