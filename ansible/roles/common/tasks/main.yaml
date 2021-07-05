@@ -33,6 +33,23 @@
   selinux:
     state: disabled
   become: yes
+
+- name: Configuramos el AllowZoneDrifting=no en firewalld
+  lineinfile:
+    dest: /etc/firewalld/firewalld.conf
+    regexp: '^AllowZoneDrifting='
+    line: "AllowZoneDrifting=no"
+    state: present
+  become: yes
+
+- name: Habilitar y reiniciar el servicio firewalld (Red Hat)
+  systemd:
+    name: firewalld
+    state: restarted
+    enabled: yes
+    masked: no
+  become: yes
+  when: ansible_os_family == 'RedHat'
   
 - name: Configuramos el hostname
   hostname:
@@ -50,7 +67,6 @@
   with_items: "{{ groups.all }}"
   become: yes
 
-- name: Reiniciando el server
-  reboot:
-  become: yes
-  
+#- name: Reiniciando el server
+#  reboot:
+#  become: yes
