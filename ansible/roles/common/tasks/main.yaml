@@ -67,6 +67,6 @@
   with_items: "{{ groups.all }}"
   become: yes
 
-#- name: Reiniciando el server
-#  reboot:
-#  become: yes
+- name: Reiniciando el server
+  reboot:
+  become: yes
