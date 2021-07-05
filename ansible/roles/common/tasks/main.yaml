@@ -87,6 +87,6 @@
     state: restarted
   become: yes
 
-- name: Reiniciando el server
-  reboot:
-  become: yes
+#- name: Reiniciando el server
+#  reboot:
+#  become: yes
