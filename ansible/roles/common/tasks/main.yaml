@@ -67,6 +67,26 @@
   with_items: "{{ groups.all }}"
   become: yes
 
+- name: Habilitamos el módulo de Kernel br_netfilter
+  modprobe:
+    name: br_netfilter
+    state: present
+  become: yes
+
+- name: Habilitamos el enmascaramiento en la zona public
+  firewalld:
+    masquerade: yes
+    state: enabled
+    permanent: true
+    zone: public
+  become: yes
+
+- name: Reiniciamos el servicio de firewalld
+  systemd:
+    name: firewalld
+    state: restarted
+  become: yes
+
 - name: Reiniciando el server
   reboot:
   become: yes
