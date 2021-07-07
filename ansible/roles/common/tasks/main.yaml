@@ -34,8 +34,8 @@
 - name: Comentamos la línea de la particion swap del /etc/fstab
   replace:
     path: /etc/fstab
-    regexp: "^(.*)swap(.*)$"
-    replace: '# \1'
+    regexp: "^([^#].*?\sswap\s+sw\s+.*)$"
+    replace: "# \1"
   become: yes
 
 - name: Reiniciando el server
