@@ -32,7 +32,7 @@
   become: yes
   
 - name: Comentamos la línea de la particion swap del /etc/fstab
-  lineinfile:
+  replace:
     path: /etc/fstab
     regexp: "^(.*)swap(.*)$"
     replace: '# \1'
