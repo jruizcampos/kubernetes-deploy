@@ -21,7 +21,23 @@
     name: "*"
     state: latest
   become: yes
+
+- name: Deshabilitamos SELinux
+  selinux:
+    state: disabled
+  become: yes
+
+- name: Desactivamos la memoria Swap
+  shell: swapoff -a
+  become: yes
   
+- name: Comentamos la línea de la particion swap del /etc/fstab
+  lineinfile:
+    path: /etc/fstab
+    regexp: "^(.*)swap(.*)$"
+    replace: '# \1'
+  become: yes
+
 - name: Reiniciando el server
   reboot:
   become: yes
@@ -44,11 +60,6 @@
     state: started
     enabled: yes
     masked: no
-  become: yes
-
-- name: Deshabilitamos SELinux
-  selinux:
-    state: disabled
   become: yes
   
 - name: Habilitamos el módulo de Kernel br_netfilter
