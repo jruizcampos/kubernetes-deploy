@@ -112,7 +112,7 @@
 
 - name: Instalamos Docker
   dnf:
-    name: "{{ docker-packages }}"
+    name: "{{ docker_packages }}"
     state: present
   become: yes
 
