@@ -1,3 +1,4 @@
 ---
 
 kubernets_domain: 'jruizcampos.com'
+docker-packages: ['docker-ce', 'docker-ce-cli', 'containerd.io']
