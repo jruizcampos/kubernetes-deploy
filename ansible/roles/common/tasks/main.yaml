@@ -35,7 +35,7 @@
   replace:
     path: /etc/fstab
     regexp: '^([^#].*?\sswap\s+sw\s+.*)$'
-    replace: '# \1'
+    replace: "# \1"
   become: yes
 
 - name: Reiniciando el server
