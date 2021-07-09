@@ -137,3 +137,10 @@
     gpgkey: https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
     exclude: kubelet kubeadm kubectl
   become: yes
+
+- name: Instalamos Kubernetes
+  dnf:
+    name: "{{ kubernetes_packages }}"
+    state: present
+    disable_excludes: Kubernetes
+  become: yes
