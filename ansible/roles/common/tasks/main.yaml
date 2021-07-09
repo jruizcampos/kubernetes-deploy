@@ -144,3 +144,12 @@
     state: present
     disable_excludes: Kubernetes
   become: yes
+
+- name: Habilitar e iniciamos el servicio de Kubernetes
+  systemd:
+    name: kubelet
+    state: started
+    enabled: yes
+    masked: no
+  become: yes
+  
