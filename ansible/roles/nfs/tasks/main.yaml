@@ -9,6 +9,7 @@
   file:
     path: /srv/nfs
     state: directory
+  become: yes
 
 - name: Agregamos los masters al /etc/exports
   lineinfile:
