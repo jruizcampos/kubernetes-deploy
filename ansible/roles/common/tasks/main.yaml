@@ -129,6 +129,7 @@
 - name: Configuramos el repositorio de Kubernetes
   yum_repository:
     name: Kubernetes
+    description: Repositorio oficial de Kubernetes
     baseurl: https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
     enabled: yes
     gpgcheck: yes
