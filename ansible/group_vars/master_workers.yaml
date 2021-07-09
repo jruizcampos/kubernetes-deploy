@@ -1,0 +1,4 @@
+---
+
+docker_packages: ['docker-ce', 'docker-ce-cli', 'containerd.io']
+kubernetes_packages: ['kubelet', 'kubeadm', 'kubectl']

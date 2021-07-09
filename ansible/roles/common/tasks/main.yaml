@@ -21,26 +21,17 @@
     name: "*"
     state: latest
   become: yes
+  
+- name: Instalamos paquetes de Utilidades
+  dnf:
+    name: "{{ common_packages }}"
+    state: present
+  become: yes
 
 - name: Deshabilitamos SELinux
   selinux:
     state: disabled
   become: yes
-
-- name: Desactivamos la memoria Swap
-  shell: swapoff -a
-  become: yes
-  
-- name: Comentamos la línea de la particion swap del /etc/fstab
-  replace:
-    path: /etc/fstab
-    regexp: '^([^#].*?\sswap\s+.*)$'
-    replace: '# \1'
-  become: yes
-
-#- name: Reiniciando el server
-#  reboot:
-#  become: yes
 
 - name: Instalando Chrony (Red Hat/Centos)
   dnf:
@@ -61,95 +52,3 @@
     enabled: yes
     masked: no
   become: yes
-  
-- name: Habilitamos el módulo de Kernel br_netfilter
-  modprobe:
-    name: br_netfilter
-    state: present
-  become: yes
-
-- name: Habilitamos el enmascaramiento en la zona public
-  firewalld:
-    masquerade: yes
-    state: enabled
-    permanent: true
-    zone: public
-  become: yes
-
-- name: Configuramos el AllowZoneDrifting=no en firewalld
-  lineinfile:
-    dest: /etc/firewalld/firewalld.conf
-    regexp: '^AllowZoneDrifting='
-    line: "AllowZoneDrifting=no"
-    state: present
-  become: yes
-
-- name: Habilitar y reiniciar el servicio firewalld (Red Hat)
-  systemd:
-    name: firewalld
-    state: restarted
-    enabled: yes
-    masked: no
-  become: yes
-  
-- name: Creando el archivo /etc/sysctl.d/k8s.conf
-  copy:
-    dest: "/etc/sysctl.d/k8s.conf"
-    content: |
-      net.bridge.bridge-nf-call-ip6tables = 1
-      net.bridge.bridge-nf-call-iptables = 1
-  become: yes
-
-- name: Recargamos todas las variables de sysctl
-  shell: sysctl --system
-  become: yes
-  
-- name: Agregamos el repositorio de Docker
-  # Lo hacemos por shell porque el modulo dnf no soporta agregar archivos .repo con más de 1 repositorio incluidos
-  shell: dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
-  args:
-    creates: /etc/yum.repos.d/docker-ce.repo
-    warn: false
-  become: yes
-
-- name: Instalamos Docker
-  dnf:
-    name: "{{ docker_packages }}"
-    state: present
-  become: yes
-
-- name: Habilitar e iniciamos el servicio de Docker
-  systemd:
-    name: docker
-    state: started
-    enabled: yes
-    masked: no
-  become: yes
-  
-- name: Configuramos el repositorio de Kubernetes
-  yum_repository:
-    name: Kubernetes
-    description: Repositorio oficial de Kubernetes
-    baseurl: https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
-    enabled: yes
-    gpgcheck: yes
-    repo_gpgcheck: yes
-    gpgkey: https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
-    exclude: kubelet kubeadm kubectl
-  become: yes
-
-- name: Instalamos Kubernetes
-  dnf:
-    name: "{{ kubernetes_packages }}"
-    state: present
-    disable_excludes: Kubernetes
-  become: yes
-
-- name: Habilitar e iniciamos el servicio de Kubernetes
-  systemd:
-    name: kubelet
-    state: started
-    enabled: yes
-    masked: no
-  become: yes
-  

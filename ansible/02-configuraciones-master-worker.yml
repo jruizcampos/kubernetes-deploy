@@ -1,0 +1,10 @@
+---
+
+- name: Realizando configuraciones comunes a los masters y workers
+  hosts: master:workers
+  vars_files:
+    - "group_vars/master_workers.yaml"
+  gather_facts: true
+  roles:
+    - master_workers
+    

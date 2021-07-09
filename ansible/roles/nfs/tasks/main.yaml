@@ -1,0 +1,29 @@
+
+- name: Instalamos paquetes de NFS
+  dnf:
+    name: "{{ nfs_packages }}"
+    state: present
+  become: yes
+
+- name: Creamos el directorio NFS
+  file:
+    path: /srv/nfs
+    state: directory
+
+- name: Agregamos los masters al /etc/exports
+  lineinfile:
+    dest: /etc/exports
+    line: "/srv/nfs/ {{ hostvars[item].ansible_host }}(rw,sync)"
+    state: present
+  when: hostvars[item].ansible_host is defined
+  with_items: "{{ groups.master }}"
+  become: yes
+  
+- name: Agregamos los workers al /etc/exports
+  lineinfile:
+    dest: /etc/exports
+    line: "/srv/nfs/ {{ hostvars[item].ansible_host }}(rw,sync)"
+    state: present
+  when: hostvars[item].ansible_host is defined
+  with_items: "{{ groups.workers }}"
+  become: yes
