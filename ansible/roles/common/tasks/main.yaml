@@ -38,9 +38,9 @@
     replace: '# \1'
   become: yes
 
-- name: Reiniciando el server
-  reboot:
-  become: yes
+#- name: Reiniciando el server
+#  reboot:
+#  become: yes
 
 - name: Instalando Chrony (Red Hat/Centos)
   dnf:
@@ -105,9 +105,11 @@
   become: yes
   
 - name: Agregamos el repositorio de Docker
+  # Lo hacemos por shell porque el modulo dnf no soporta agregar archivos .repo con más de 1 repositorio incluidos
   shell: dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
   args:
     creates: /etc/yum.repos.d/docker-ce.repo
+  warn: false
   become: yes
 
 - name: Instalamos Docker
@@ -124,3 +126,13 @@
     masked: no
   become: yes
   
+- name: Configuramos el repositorio de Kubernetes
+  yum_repository:
+    name: Kubernetes
+    baseurl: https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+    enabled: yes
+    gpgcheck: yes
+    repo_gpgcheck: yes
+    gpgkey: https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+    exclude: kubelet kubeadm kubectl
+  become: yes
