@@ -41,21 +41,21 @@
   shell: exportfs -r
   become: yes
 
-- name: Habilitamos servicios usados por NFS: nfs
+- name: Habilitamos servicios usados por NFS nfs
   firewalld:
     service: nfs
     permanent: true
     state: enabled
   become: yes
 
-- name: Habilitamos servicios usados por NFS: rpc-bind
+- name: Habilitamos servicios usados por NFS rpc-bind
   firewalld:
     service: rpc-bind
     permanent: true
     state: enabled
   become: yes
 
-- name: Habilitamos servicios usados por NFS: mountd
+- name: Habilitamos servicios usados por NFS mountd
   firewalld:
     service: mountd
     permanent: true
