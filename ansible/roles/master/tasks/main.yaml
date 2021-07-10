@@ -1,32 +1,49 @@
 ---
 
-- name: Habilitamos los puertos usados por Kubernets Master
+- name: Habilitamos puertos usados por Kubernets Master: 6443
   firewalld:
     port: 6443/tcp
     permanent: true
     state: enabled
   become: yes
-  
+
+- name: Habilitamos puertos usados por Kubernets Master: 2379-2380/tcp
   firewalld:
     port: 2379-2380/tcp
     permanent: true
     state: enabled
   become: yes
 
+- name: Habilitamos puertos usados por Kubernets Master: 10250-10252/tcp
   firewalld:
     port: 10250-10252/tcp
     permanent: true
     state: enabled
   become: yes
-  
+
+- name: Habilitamos puertos usados por Kubernets Master: 10255/tcp
   firewalld:
     port: 10255/tcp
     permanent: true
     state: enabled
   become: yes
+  
+- name: 
+  firewalld:
+    rich_rule: 'rule family=ipv4 source address={{ hostvars[item].ansible_host }}/32 accept'
+    permanent: true
+    state: enabled
+  when: hostvars[item].ansible_host is defined
+  with_items: "{{ groups.workers }}"
+  become: yes
+  
 
 - name: Reiniciando el servicio Firewalld 
   systemd:
     name: firewalld
     state: restarted
+  become: yes
+
+- name: Descargando imágenes requeridas por Kubernetes
+  shell: kubeadm config images pull
   become: yes
