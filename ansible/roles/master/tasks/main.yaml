@@ -30,7 +30,7 @@
   
 - name: Agregando regla para permitir el acceso de los workers al master
   firewalld:
-    rich_rule: 'rule family=ipv4 source address={{ hostvars[item].ansible_host }}/32 accept'
+    rich_rule: "rule family=ipv4 source address={{ hostvars[item].ansible_host }}/32 accept"
     permanent: true
     state: enabled
   when: hostvars[item].ansible_host is defined
@@ -43,7 +43,7 @@
 
 - name: Agregando regla para permitir el acceso de los contenedores a localhost
   firewalld:
-    rich_rule: 'rule family=ipv4 source address={{ docker_network | ipaddr('net') }} accept'
+    rich_rule: "rule family=ipv4 source address={{ docker_network | ipaddr('net') }} accept"
     permanent: true
     state: enabled
   become: yes
