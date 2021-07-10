@@ -28,3 +28,41 @@
   when: hostvars[item].ansible_host is defined
   with_items: "{{ groups.workers }}"
   become: yes
+
+- name: Habilitar e iniciamos el servicio de NFS
+  systemd:
+    name: nfs-server
+    state: started
+    enabled: yes
+    masked: no
+  become: yes
+  
+- name: Recargamos la configuración del fichero /etc/exports
+  shell: exportfs -r
+  become: yes
+
+- name: Habilitamos los puertos usados por NFS
+  firewalld:
+    service: nfs
+    permanent: true
+    state: enabled
+  become: yes
+
+  firewalld:
+    service: rpc-bind
+    permanent: true
+    state: enabled
+  become: yes
+
+  firewalld:
+    service: mountd
+    permanent: true
+    state: enabled
+  become: yes
+  
+- name: Reiniciando el servicio Firewalld 
+  systemd:
+    name: firewalld
+    state: restarted
+  become: yes
+  

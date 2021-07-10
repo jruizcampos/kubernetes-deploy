@@ -1,1 +1,32 @@
 ---
+
+- name: Habilitamos los puertos usados por Kubernets Master
+  firewalld:
+    port: 6443/tcp
+    permanent: true
+    state: enabled
+  become: yes
+  
+  firewalld:
+    port: 2379-2380/tcp
+    permanent: true
+    state: enabled
+  become: yes
+
+  firewalld:
+    port: 10250-10252/tcp
+    permanent: true
+    state: enabled
+  become: yes
+  
+  firewalld:
+    port: 10255/tcp
+    permanent: true
+    state: enabled
+  become: yes
+
+- name: Reiniciando el servicio Firewalld 
+  systemd:
+    name: firewalld
+    state: restarted
+  become: yes
