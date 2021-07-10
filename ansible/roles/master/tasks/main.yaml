@@ -38,8 +38,8 @@
   become: yes
 
 - debug:
-  var: docker_network
-  var: docker_network | ipaddr('net')
+    msg: "{{ docker_network }}"
+    msg: "{{ docker_network | ipaddr('net') }}"
 
 - name: Agregando regla para permitir el acceso de los contenedores a localhost
   firewalld:
