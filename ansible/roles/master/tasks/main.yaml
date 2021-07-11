@@ -69,6 +69,33 @@
   register: kubeadd_cmd
   become: yes
 
-- debug:
-    msg: "{{ kubeadd_cmd }}"
+- name: Mostrando la salida de la ejecución del kubeadm init
+  debug:
+    msg: "{{ kubeadd_cmd.stdout }}"
+  
+- name: Extrayendo el hash CRT CA del Master
+  shell: openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | sha256sum
+  register: cert_out
+  become: yes
+  
+- name: Limpiando el Hash CRT
+  set_fact: 
+    cert_hash: "{{ cert_out.stdout | regex_search('^[a-f0-9]{64}') }}"
+  
+- name: Mostramos el Hash CRT extraido
+  debug:
+    msg: "{{ cert_hash }}"
+
+- name: Extrayendo el token del Master en formato JSON
+  shell: kubeadm token list -o json
+  register: token_out
+  become: yes
+  
+- name: Limpiando el Token
+  set_fact: 
+    token_hash: "{{ token_out.stdout | from_json | json_query('token') }}"
+  
+- name: Mostramos el Token extraido
+  debug:
+    msg: "{{ token_hash }}"
   
