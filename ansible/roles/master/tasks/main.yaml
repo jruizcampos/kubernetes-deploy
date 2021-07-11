@@ -62,7 +62,7 @@
   become: yes
   
 - debug:
-    msg: "kubeadm init --apiserver-advertise-address {{ ansible_host }} --pod-network-cidr {{ pod_network }}"
+    msg: "Se ejecutara: kubeadm init --apiserver-advertise-address {{ ansible_host }} --pod-network-cidr {{ pod_network }}"
     
 - name: Instalamos el plugin CNI de kubernetes y definimos la red de los PODs
   shell: "kubeadm init --apiserver-advertise-address {{ ansible_host }} --pod-network-cidr {{ pod_network }}"

@@ -1,0 +1,8 @@
+
+- debug:
+    msg: "{{ kubeadd_cmd }}"
+  when: kubeadd_cmd is defined
+  
+- debug: var=hostvars['master']['kubeadd_cmd']
+  when: hostvars['master']['kubeadd_cmd'] is defined
+  
