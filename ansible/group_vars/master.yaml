@@ -1,3 +1,4 @@
 ---
 
 docker_network: "{{ ansible_docker0.ipv4.network }}/{{ ansible_docker0.ipv4.netmask }}"
+pod_network: "10.255.0.0/16"    # Aquí definimos la red por defecto para los pods. Podemos cambiarla si así lo deseamos.

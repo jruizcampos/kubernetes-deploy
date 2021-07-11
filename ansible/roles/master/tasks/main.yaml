@@ -60,3 +60,11 @@
 - name: Descargando imágenes requeridas por Kubernetes
   shell: kubeadm config images pull
   become: yes
+  
+- debug:
+    msg: "kubeadm init --apiserver-advertise-address {{ inventory_hostname.ansible_host }} --pod-network-cidr {{ pod_network }}"
+
+#- name: Instalamos el plugin CNI de kubernetes y definimos la red de los PODs
+#  shell: "kubeadm init --apiserver-advertise-address {{ inventory_hostname.ansible_host }} --pod-network-cidr {{ pod_network }}"
+#    register: kubeadd_cmd
+#  become: yes
