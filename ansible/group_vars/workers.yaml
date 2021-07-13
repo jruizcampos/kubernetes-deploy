@@ -1,0 +1,4 @@
+---
+
+cert_hash: "{{ hostvars['master1']['cert_hash'] }}"
+token_hash: "{{ hostvars['master1']['token_hash'] }}"

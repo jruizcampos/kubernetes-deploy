@@ -1,13 +1,9 @@
 
-#- debug:
-#    msg: "{{ kubeadd_cmd }}"
-#  when: kubeadd_cmd is defined
+- debug:
+    msg: "{{ cert_hash }}"
+  when: cert_hash is defined
 
 - debug:
-    msg: "{{ hostvars['master1']['cert_hash'] }}"
-  when: hostvars['master1']['cert_hash'] is defined
-
-- debug:
-    msg: "{{ hostvars['master1']['token_hash'] }}"
-  when: hostvars['master1']['token_hash'] is defined
+    msg: "{{ token_hash }}"
+  when: token_hash is defined
   
