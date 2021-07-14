@@ -71,7 +71,7 @@
 
 - name: Mostrando la salida de la ejecución del kubeadm init
   debug:
-    msg: "{{ kubeadd_cmd.stdout }}"
+    msg: "{{ kubeadd_cmd }}"
   
 - name: Extrayendo el hash CRT CA del Master
   shell: openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | sha256sum
@@ -98,4 +98,28 @@
 - name: Mostramos el Token extraido
   debug:
     msg: "{{ token_hash }}"
+  
+- name: Creamos el directorio .kube
+  file:
+    path: /root/.kube
+    state: directory
+  become: yes
+
+- name: Autorizando al usuario root acceder al cluster Kubernetes
+  copy:
+    src: /etc/kubernetes/admin.conf
+    dest: /root/.kube/config
+    remote_src: yes
+    owner: root
+    group: root
+  become: yes
+  
+- name: Ejecutando kubectl get nodes
+  shell: kubectl get nodes
+  register: kubectl_out
+  become: yes
+  
+- name: Mostramos el resultado de kubectl get nodes
+  debug:
+    msg: "{{ kubectl_out }}"
   

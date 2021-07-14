@@ -1,4 +1,8 @@
 ---
 
-cert_hash: "{{ hostvars['master1']['cert_hash'] }}"
-token_hash: "{{ hostvars['master1']['token_hash'] }}"
+# Obtenemos el hash y token mostrado luego de ejecutar kubeadm init --pod-network-cidr en el playbook anterior
+# Así podemos usarlos para ejecutar el kubeadm join
+
+cert_hash: "{{ hostvars['master1'].cert_hash }}"
+token_hash: "{{ hostvars['master1'].token_hash }}"
+ip_master: "{{ hostvars['master1'].ansible_host }}"
