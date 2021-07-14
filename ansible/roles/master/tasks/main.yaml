@@ -71,7 +71,7 @@
 
 - name: Mostrando la salida de la ejecución del kubeadm init
   debug:
-    msg: "{{ kubeadd_cmd }}"
+    msg: "{{ kubeadd_cmd.stdout_lines }}"
   
 - name: Extrayendo el hash CRT CA del Master
   shell: openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | sha256sum
@@ -113,6 +113,15 @@
     owner: root
     group: root
   become: yes
+    
+- name: Instalamos la SDN Flannel para Azure
+  shell: kubectl apply -f https://docs.projectcalico.org/manifests/canal.yaml
+  register: kubectl_sdn
+  become: yes
+  
+- name: Mostramos el resultado de la instalación de la SDN kubectl apply -f
+  debug:
+    msg: "{{ kubectl_sdn.stdout_lines }}"
   
 - name: Ejecutando kubectl get nodes
   shell: kubectl get nodes
@@ -121,5 +130,14 @@
   
 - name: Mostramos el resultado de kubectl get nodes
   debug:
-    msg: "{{ kubectl_out }}"
+    msg: "{{ kubectl_out.stdout_lines }}"
+
+- name: Ejecutando kubectl get pods A
+  shell: kubectl get pods -A
+  register: kubectl_pods
+  become: yes
+  
+- name: Mostramos el resultado de kubectl get pods A
+  debug:
+    msg: "{{ kubectl_pods.stdout_lines }}"
   

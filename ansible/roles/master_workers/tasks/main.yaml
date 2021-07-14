@@ -35,6 +35,20 @@
     line: "AllowZoneDrifting=no"
     state: present
   become: yes
+  
+- name: Habilitamos puertos usados por la SDN Flannel para Azure 8285 UDP
+  firewalld:
+    port: 8285/udp
+    permanent: true
+    state: enabled
+  become: yes
+  
+- name: Habilitamos puertos usados por la SDN Flannel para Azure 8472 UDP
+  firewalld:
+    port: 8472/udp
+    permanent: true
+    state: enabled
+  become: yes
 
 - name: Habilitar y reiniciar el servicio firewalld (Red Hat)
   systemd:

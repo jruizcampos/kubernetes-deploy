@@ -7,3 +7,7 @@
     msg: "{{ token_hash }}"
   when: token_hash is defined
   
+- debug:
+    msg: "{{ ip_master }}"
+  when: ip_master is defined
+  
