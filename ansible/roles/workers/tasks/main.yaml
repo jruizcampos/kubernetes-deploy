@@ -11,3 +11,34 @@
     msg: "{{ ip_master }}"
   when: ip_master is defined
   
+- name: Habilitamos los puertos necesarios para unirse al clúster 10250
+  firewalld:
+    port: 10250/tcp
+    permanent: true
+    zone: public
+    state: enabled
+  become: yes
+  
+- name: Habilitamos los puertos necesarios para unirse al clúster 30000 32767
+  firewalld:
+    port: 30000-32767/tcp
+    permanent: true
+    zone: public
+    state: enabled
+  become: yes
+  
+- name: Reiniciando el servicio Firewalld 
+  systemd:
+    name: firewalld
+    state: restarted
+  become: yes
+  
+- name: Unimos el Worker al clúster Kubernetes
+  shell: "kubeadm join {{ ip_master }}:6443 --token {{ token_hash }} --discovery-token-ca-cert-hash sha256:{{ cert_hash }}
+  register: kubeadm_join
+  become: yes
+  
+- name: Resultado de la unión del Worker al clúster
+  debug:
+    msg: "{{ kubeadm_join.stdout_lines }}"
+  

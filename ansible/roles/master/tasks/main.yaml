@@ -113,7 +113,7 @@
     owner: root
     group: root
   become: yes
-    
+  
 - name: Instalamos la SDN Flannel para Azure
   shell: kubectl apply -f https://docs.projectcalico.org/manifests/canal.yaml
   register: kubectl_sdn
@@ -123,6 +123,47 @@
   debug:
     msg: "{{ kubectl_sdn.stdout_lines }}"
   
+- name: Desplegando el Ingress Controller
+  shell: kubectl apply -f https://raw.githubusercontent.com/haproxytech/kubernetes-ingress/v1.5/deploy/haproxy-ingress.yaml
+  register: kubectl_ingc
+  become: yes
+  
+- name: Mostramos el resultado de la instalación del Ingress Controller
+  debug:
+    msg: "{{ kubectl_ingc.stdout_lines }}"
+  
+- name: Creando el usuario kubeadmin
+  user:
+    name: kubeadmin
+    password: '$6$s3cr3t.s4lt$j3SHtpVd9BgXbQQKpIGiD0nxZdswKkT/mmxmoeTl1I2XQp6Pq.kwfPBErvgOxpOswooWwi6SqmHEmS1T6FxcZ.' ## password='kubeadmin' encriptado
+    comment: Usuario administrador de Kubernetes
+    create_home: yes
+    home: /home/kubeadmin
+  become: yes
+
+- name: Creamos el directorio .kube para usuario kubeadmin
+  file:
+    path: /home/kubeadmin/.kube
+    state: directory
+  become: yes
+
+- name: Autorizando al usuario kubeadmin acceder al cluster Kubernetes
+  copy:
+    src: /etc/kubernetes/admin.conf
+    dest: /home/kubeadmin/.kube/config
+    remote_src: yes
+    owner: kubeadmin
+    group: kubeadmin
+  become: yes
+
+- name: Brindando al usuario kubeadmin permisos sudo
+  lineinfile:
+    dest: /etc/sudoers.d/kubeadmin
+    state: present
+    create: yes
+    line: 'ALL   ALL = (ALL) NOPASSWD: ALL'
+  become: yes
+
 - name: Ejecutando kubectl get nodes
   shell: kubectl get nodes
   register: kubectl_out
@@ -133,7 +174,7 @@
     msg: "{{ kubectl_out.stdout_lines }}"
 
 - name: Ejecutando kubectl get pods A
-  shell: kubectl get pods -A
+  shell: kubectl get pods -A -o wide
   register: kubectl_pods
   become: yes
   
@@ -141,3 +182,20 @@
   debug:
     msg: "{{ kubectl_pods.stdout_lines }}"
   
+- name: Ejecutando kubectl get namespaces
+  shell: kubectl get namespaces
+  register: kubectl_name
+  become: yes
+  
+- name: Mostramos el resultado de kubectl get namespaces
+  debug:
+    msg: "{{ kubectl_name.stdout_lines }}"
+  
+- name: Ejecutando kubectl get svc
+  shell: kubectl get svc -A
+  register: kubectl_svc
+  become: yes
+  
+- name: Mostramos el resultado de kubectl get svc
+  debug:
+    msg: "{{ kubectl_svc.stdout_lines }}"
