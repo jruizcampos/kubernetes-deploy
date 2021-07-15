@@ -34,7 +34,7 @@
   become: yes
   
 - name: Unimos el Worker al clúster Kubernetes
-  shell: "kubeadm join {{ ip_master }}:6443 --token {{ token_hash }} --discovery-token-ca-cert-hash sha256:{{ cert_hash }}
+  shell: "kubeadm join {{ ip_master }}:6443 --token {{ token_hash }} --discovery-token-ca-cert-hash sha256:{{ cert_hash }}"
   register: kubeadm_join
   become: yes
   
