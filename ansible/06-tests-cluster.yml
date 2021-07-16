@@ -1,0 +1,10 @@
+---
+
+- name: Realizando pruebas finales al Cluster
+  hosts: master
+  vars_files:
+    - "group_vars/tests.yaml"
+  gather_facts: true
+  roles:
+    - tests
+  

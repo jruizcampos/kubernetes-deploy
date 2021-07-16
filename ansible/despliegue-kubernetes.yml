@@ -12,3 +12,5 @@
 - import_playbook: 04-configurando-master.yml
 # Ejecutamos las configuraciones correspondientes a los nodos Worker
 - import_playbook: 05-configurando-workers.yml
+# Realizamos pruebas finales al cluster recién desplegado
+- import_playbook: 06-tests-cluster.yml
