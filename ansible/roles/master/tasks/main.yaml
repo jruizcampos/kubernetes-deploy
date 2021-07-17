@@ -113,13 +113,35 @@
     owner: root
     group: root
   become: yes
-  
+
+## Instalamos la SDN Calico o Flannel ##
 - name: Instalamos la SDN Flannel para Azure
   shell: kubectl apply -f https://docs.projectcalico.org/manifests/canal.yaml
   register: kubectl_sdn
   become: yes
+  when: sdn == 'flannel'
   
-- name: Mostramos el resultado de la instalación de la SDN kubectl apply -f
+- name: Instalamos el operador de Tigera
+  shell: kubectl create -f https://docs.projectcalico.org/manifests/tigera-operator.yaml
+  register: kubectl_operator
+  become: yes
+  when: sdn == 'calico'
+
+- name: Copiando el custom resources de Calico
+  copy:
+    src: custom-resources.yaml
+    dest: /root/custom-resources.yaml
+    mode: '0644'
+  become: yes
+  when: sdn == 'calico'
+  
+- name: Instalamos la SDN Calico
+  shell: kubectl apply -f /root/custom-resources.yaml
+  register: kubectl_sdn
+  become: yes
+  when: sdn == 'calico'
+
+- name: Mostramos el resultado de la instalación de la SDN
   debug:
     msg: "{{ kubectl_sdn.stdout_lines }}"
   

@@ -4,3 +4,5 @@
 docker_network: "{{ ansible_docker0.ipv4.network }}/{{ ansible_docker0.ipv4.netmask }}"
 # Aquí definimos la red por defecto para los pods. Podemos cambiarla si así lo deseamos.
 pod_network: "10.255.0.0/16"
+# Aquí definimos que tipo de SDN queremos desplegar Calico o Flannel
+sdn: calico
