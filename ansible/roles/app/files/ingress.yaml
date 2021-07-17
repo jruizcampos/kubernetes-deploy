@@ -12,7 +12,7 @@ spec:
   - host: foo.bar
     http:
       paths:
-      - path: /webapp-routed
+      - path: /ajedrez-unir
         pathType: "Prefix"
         backend:
           service:
