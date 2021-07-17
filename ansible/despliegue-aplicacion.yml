@@ -1,0 +1,10 @@
+---
+
+- name: Realizando el Despliegue de la aplicación sobre Kubernetes
+  hosts: master
+  vars_files:
+    - "group_vars/app.yaml"
+  gather_facts: true
+  roles:
+    - app
+  

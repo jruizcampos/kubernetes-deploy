@@ -1,0 +1,47 @@
+---
+
+- name: Ejecutando kubectl cluster info
+  shell: "kubectl cluster-info"
+  register: kubectl_info
+  become: yes
+  
+- name: Mostrando información del Cluster Kubernetes
+  debug:
+    msg: "{{ kubectl_info.stdout_lines }}"
+
+- name: Creando el namespace
+  shell: kubectl create namespace webapp-routed
+  register: kubectl_nspace
+  become: yes
+  
+- name: Mostramos el resultado de kubectl create namespace
+  debug:
+    msg: "{{ kubectl_nspace.stdout_lines }}"
+
+- name: Desplegando la Aplicación
+  shell: kubectl apply -f first-routed-webapp.yaml
+  register: kubectl_apply_app
+  become: yes
+  
+- name: Mostramos el resultado de kubectl apply Aplicacion
+  debug:
+    msg: "{{ kubectl_apply_app.stdout_lines }}"
+
+- name: Desplegando el Ingress Controller
+  shell: kubectl apply -f ingress.yaml
+  register: kubectl_apply_ic
+  become: yes
+  
+- name: Mostramos el resultado de kubectl apply Ingress Controller
+  debug:
+    msg: "{{ kubectl_apply_ic.stdout_lines }}"
+  
+- name: Desplegando el ConfigMap
+  shell: kubectl apply -f configmap.yaml
+  register: kubectl_apply_cm
+  become: yes
+  
+- name: Mostramos el resultado de kubectl apply Config Map
+  debug:
+    msg: "{{ kubectl_apply_cm.stdout_lines }}"
+  
