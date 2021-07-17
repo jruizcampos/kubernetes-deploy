@@ -29,5 +29,5 @@ variable "workers" {
 	type = list(string)
 	description = "vms workers"
 	#default = ["worker1", "worker2", "worker3"]
-	default = ["worker1"]
+	default = ["worker1", "worker2"]
 }
