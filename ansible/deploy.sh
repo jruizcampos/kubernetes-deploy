@@ -1,7 +1,5 @@
 #!/bin/bash
 
-#ansible -i hosts -m ping all
-
 # Ejecutamos el playbook de despliegue de Kubernetes
 ansible-playbook -i hosts despliegue-kubernetes.yml
 
