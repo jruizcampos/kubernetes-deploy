@@ -84,6 +84,13 @@
     state: present
   become: yes
 
+- name: Copiando el daemon.json de Docker: Nos asegura que el cgroupdriver sea systemd
+  copy:
+    src: daemon.json
+    dest: /etc/docker/daemon.json
+    mode: '0644'
+  become: yes
+
 - name: Habilitar e iniciamos el servicio de Docker
   systemd:
     name: docker
