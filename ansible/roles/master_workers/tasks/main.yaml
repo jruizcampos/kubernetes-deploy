@@ -84,7 +84,7 @@
     state: present
   become: yes
 
-- name: Copiando el daemon.json de Docker: Nos asegura que el cgroupdriver sea systemd
+- name: Copiamos el daemon.json de Docker para asegurarnos que el cgroupdriver sea systemd
   copy:
     src: daemon.json
     dest: /etc/docker/daemon.json
