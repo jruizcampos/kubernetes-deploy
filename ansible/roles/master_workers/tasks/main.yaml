@@ -84,13 +84,6 @@
     state: present
   become: yes
 
-- name: Copiamos el daemon.json de Docker para asegurarnos que el cgroupdriver sea systemd
-  copy:
-    src: daemon.json
-    dest: /etc/docker/daemon.json
-    mode: '0644'
-  become: yes
-
 - name: Habilitar e iniciamos el servicio de Docker
   systemd:
     name: docker
@@ -99,6 +92,19 @@
     masked: no
   become: yes
   
+- name: Copiamos el daemon.json de Docker para asegurarnos que el cgroupdriver sea systemd
+  copy:
+    src: daemon.json
+    dest: /etc/docker/daemon.json
+    mode: '0644'
+  become: yes
+
+- name: Reiniciando el servicio de Docker
+  systemd:
+    name: docker
+    state: restarted
+  become: yes
+
 - name: Configuramos el repositorio de Kubernetes
   yum_repository:
     name: Kubernetes
