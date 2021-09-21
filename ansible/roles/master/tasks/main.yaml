@@ -121,7 +121,12 @@
   register: kubectl_sdn
   become: yes
   when: sdn == 'flannel'
-  
+
+- name: Mostramos el resultado de la instalación de la SDN Flannel
+  debug:
+    msg: "{{ kubectl_sdn.stdout_lines }}"
+  when: sdn == 'flannel'
+
 - name: Instalamos el operador de Tigera
   shell: kubectl create -f https://docs.projectcalico.org/manifests/tigera-operator.yaml
   register: kubectl_operator
@@ -142,18 +147,19 @@
   become: yes
   when: sdn == 'calico'
 
-- name: Mostramos el resultado de la instalación de la SDN
+- name: Mostramos el resultado de la instalación de la SDN Calico
   debug:
     msg: "{{ kubectl_sdn.stdout_lines }}"
+  when: sdn == 'calico'
   
-- name: Desplegando el Ingress Controller
-  shell: kubectl apply -f https://raw.githubusercontent.com/haproxytech/kubernetes-ingress/v1.5/deploy/haproxy-ingress.yaml
-  register: kubectl_ingc
-  become: yes
+#- name: Desplegando el Ingress Controller
+#  shell: kubectl apply -f https://raw.githubusercontent.com/haproxytech/kubernetes-ingress/v1.5/deploy/haproxy-ingress.yaml
+#  register: kubectl_ingc
+#  become: yes
   
-- name: Mostramos el resultado de la instalación del Ingress Controller
-  debug:
-    msg: "{{ kubectl_ingc.stdout_lines }}"
+#- name: Mostramos el resultado de la instalación del Ingress Controller
+#  debug:
+#    msg: "{{ kubectl_ingc.stdout_lines }}"
   
 - name: Creando el usuario kubeadmin
   user:
