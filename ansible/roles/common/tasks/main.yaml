@@ -3,6 +3,7 @@
 - name: Configuramos el hostname
   hostname:
     name: "{{inventory_hostname}}.{{kubernets_domain}}"
+    use: systemd
   when: inventory_hostname is regex("work*|master*")
   become: yes
 
