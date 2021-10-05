@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: myingress
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /mongodb
+        pathType: Prefix
+        backend:
+          service:
+            name: mongo-ex-service
+            port:
+              number: 8081
+      - path: /ajedrez
+        pathType: Prefix
+        backend:
+          service:
+            name: ajedrez-app-service
+            port:
+              number: 8082
