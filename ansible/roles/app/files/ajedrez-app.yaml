@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ajedrez-app
+  labels:
+    app: ajedrez-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ajedrez-app
+  template:
+    metadata:
+      labels:
+        app: ajedrez-app
+    spec:
+      containers:
+      - name: ajedrez-app
+        image: jruizcampos/unir-chess
+        ports:
+        - containerPort: 80
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: ajedrez-app-service
+spec:
+  selector:
+    app: ajedrez-app
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 8082
+      targetPort: 80
+      #nodePort: 30000
