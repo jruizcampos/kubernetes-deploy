@@ -152,14 +152,14 @@
     msg: "{{ kubectl_sdn.stdout_lines }}"
   when: sdn == 'calico'
   
-#- name: Desplegando el Ingress Controller
-#  shell: kubectl apply -f https://raw.githubusercontent.com/haproxytech/kubernetes-ingress/v1.5/deploy/haproxy-ingress.yaml
-#  register: kubectl_ingc
-#  become: yes
+- name: Desplegando el Nginx Ingress Controller
+  shell: kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.0.4/deploy/static/provider/baremetal/deploy.yaml
+  register: kubectl_nginxic
+  become: yes
   
-#- name: Mostramos el resultado de la instalación del Ingress Controller
-#  debug:
-#    msg: "{{ kubectl_ingc.stdout_lines }}"
+- name: Mostramos el resultado de la instalación del Nginx Ingress Controller
+  debug:
+    msg: "{{ kubectl_nginxic.stdout_lines }}"
   
 - name: Creando el usuario kubeadmin
   user:

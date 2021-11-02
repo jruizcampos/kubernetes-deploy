@@ -1,6 +1,6 @@
 ---
 
-## Mostramos Informacion del Cluster y creamos el namespace ##
+## Mostramos Informacion del Cluster
 - name: Ejecutando kubectl cluster info
   shell: "kubectl cluster-info"
   register: kubectl_info
@@ -9,63 +9,75 @@
 - name: Mostrando información del Cluster Kubernetes
   debug:
     msg: "{{ kubectl_info.stdout_lines }}"
-  
-- name: Creando el namespace
-  shell: kubectl create namespace webapp-routed
-  register: kubectl_nspace
-  become: yes
-  
-- name: Mostramos el resultado de kubectl create namespace
-  debug:
-    msg: "{{ kubectl_nspace.stdout_lines }}"
 
-## Copiando los archivos de despliegue al master ##
-- name: Copiando el archivo de la aplicacion
+## Copiando los archivos de despliegue de la aplicación al master ##
+
+- name: Copiando los archivos de las Aplicaciones
   copy:
-    src: first-routed-webapp.yaml
-    dest: /root/first-routed-webapp.yaml
+    src: "{{ item }}"
+    dest: "/root/{{ item }}"
     mode: '0644'
+  with_items:
+    - "{{ files }}"
   become: yes
 
-- name: Copiando el archivo del Ingress Controller
-  copy:
-    src: ingress.yaml
-    dest: /root/ingress.yaml
-    mode: '0644'
-  become: yes
+#- name: Copiando el archivo de la aplicacion
+#  copy:
+#    src: first-routed-webapp.yaml
+#    dest: /root/first-routed-webapp.yaml
+#    mode: '0644'
+#  become: yes
+
+#- name: Copiando el archivo del Ingress Controller
+#  copy:
+#    src: ingress.yaml
+#    dest: /root/ingress.yaml
+#    mode: '0644'
+#  become: yes
   
-- name: Copiando el archivo ConfigMap
-  copy:
-    src: configmap.yaml
-    dest: /root/configmap.yaml
-    mode: '0644'
-  become: yes
+#- name: Copiando el archivo ConfigMap
+#  copy:
+#    src: configmap.yaml
+#    dest: /root/configmap.yaml
+#    mode: '0644'
+#  become: yes
 
 ## Desplegando el Aplicativo ##
 - name: Desplegando la Aplicación
-  shell: kubectl apply -f /root/first-routed-webapp.yaml
+  shell: "kubectl apply -f /root/{{ item }}"
   register: kubectl_apply_app
+  with_items:
+    - "{{ files }}"
   become: yes
-  
-- name: Mostramos el resultado de kubectl apply Aplicacion
+
+- name: Mostramos el resultado del despliegue de las Aplicaciones
   debug:
     msg: "{{ kubectl_apply_app.stdout_lines }}"
 
-- name: Desplegando el Ingress Controller
-  shell: kubectl apply -f /root/ingress.yaml
-  register: kubectl_apply_ic
-  become: yes
+#- name: Desplegando la Aplicación
+#  shell: kubectl apply -f /root/first-routed-webapp.yaml
+#  register: kubectl_apply_app
+#  become: yes
   
-- name: Mostramos el resultado de kubectl apply Ingress Controller
-  debug:
-    msg: "{{ kubectl_apply_ic.stdout_lines }}"
+#- name: Mostramos el resultado de kubectl apply Aplicacion
+#  debug:
+#    msg: "{{ kubectl_apply_app.stdout_lines }}"
+
+#- name: Desplegando el Ingress Controller
+#  shell: kubectl apply -f /root/ingress.yaml
+#  register: kubectl_apply_ic
+#  become: yes
   
-- name: Desplegando el ConfigMap
-  shell: kubectl apply -f /root/configmap.yaml
-  register: kubectl_apply_cm
-  become: yes
+#- name: Mostramos el resultado de kubectl apply Ingress Controller
+#  debug:
+#    msg: "{{ kubectl_apply_ic.stdout_lines }}"
   
-- name: Mostramos el resultado de kubectl apply Config Map
-  debug:
-    msg: "{{ kubectl_apply_cm.stdout_lines }}"
+#- name: Desplegando el ConfigMap
+#  shell: kubectl apply -f /root/configmap.yaml
+#  register: kubectl_apply_cm
+#  become: yes
+  
+#- name: Mostramos el resultado de kubectl apply Config Map
+#  debug:
+#    msg: "{{ kubectl_apply_cm.stdout_lines }}"
   
