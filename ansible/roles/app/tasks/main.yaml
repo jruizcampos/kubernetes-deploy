@@ -10,8 +10,7 @@
   debug:
     msg: "{{ kubectl_info.stdout_lines }}"
 
-## Copiando los archivos de despliegue de la aplicación al master ##
-
+## Copiando los archivos de despliegue de las aplicaciones al master ##
 - name: Copiando los archivos de las Aplicaciones
   copy:
     src: "{{ item }}"
@@ -21,29 +20,8 @@
     - "{{ files }}"
   become: yes
 
-#- name: Copiando el archivo de la aplicacion
-#  copy:
-#    src: first-routed-webapp.yaml
-#    dest: /root/first-routed-webapp.yaml
-#    mode: '0644'
-#  become: yes
-
-#- name: Copiando el archivo del Ingress Controller
-#  copy:
-#    src: ingress.yaml
-#    dest: /root/ingress.yaml
-#    mode: '0644'
-#  become: yes
-  
-#- name: Copiando el archivo ConfigMap
-#  copy:
-#    src: configmap.yaml
-#    dest: /root/configmap.yaml
-#    mode: '0644'
-#  become: yes
-
-## Desplegando el Aplicativo ##
-- name: Desplegando la Aplicación
+## Desplegando las Aplicaciones ##
+- name: Desplegando las Aplicaciones
   shell: "kubectl apply -f /root/{{ item }}"
   register: kubectl_apply_app
   with_items:
@@ -52,32 +30,11 @@
 
 - name: Mostramos el resultado del despliegue de las Aplicaciones
   debug:
-    msg: "{{ kubectl_apply_app.stdout_lines }}"
+    msg: "{{ item.stdout_lines }}"
+  with_items:
+    - "{{ kubectl_apply_app.results }}"
 
-#- name: Desplegando la Aplicación
-#  shell: kubectl apply -f /root/first-routed-webapp.yaml
-#  register: kubectl_apply_app
-#  become: yes
-  
 #- name: Mostramos el resultado de kubectl apply Aplicacion
 #  debug:
 #    msg: "{{ kubectl_apply_app.stdout_lines }}"
 
-#- name: Desplegando el Ingress Controller
-#  shell: kubectl apply -f /root/ingress.yaml
-#  register: kubectl_apply_ic
-#  become: yes
-  
-#- name: Mostramos el resultado de kubectl apply Ingress Controller
-#  debug:
-#    msg: "{{ kubectl_apply_ic.stdout_lines }}"
-  
-#- name: Desplegando el ConfigMap
-#  shell: kubectl apply -f /root/configmap.yaml
-#  register: kubectl_apply_cm
-#  become: yes
-  
-#- name: Mostramos el resultado de kubectl apply Config Map
-#  debug:
-#    msg: "{{ kubectl_apply_cm.stdout_lines }}"
-  
