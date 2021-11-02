@@ -34,7 +34,3 @@
   with_items:
     - "{{ kubectl_apply_app.results }}"
 
-#- name: Mostramos el resultado de kubectl apply Aplicacion
-#  debug:
-#    msg: "{{ kubectl_apply_app.stdout_lines }}"
-
