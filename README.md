@@ -8,7 +8,7 @@ Para poder ejecutar el proyecto es necesario tener como mínimo los siguientes h
 - Un servidor de administración: Debe tener Terraform, Ansible y GIT preinstalado. 2 GB RAM, 2 CPU 2.3 Ghz (mínimo)
 - Un servidor master: 2 GB RAM, 2 CPU 2.3 Ghz (mínimo)
 - Uno o más servidores worker: 2 GB RAM, 2 CPU 2.3 Ghz (mínimo)
-- (Opcional) Un servidor NFS: Puede utilizar el servidor master para esta función.
+- **(Opcional)** Un servidor NFS: Puede utilizar el servidor master para esta función.
 
 En caso de requerir el despliegue de las máquinas en la nube de Azure, puede utilizar el siguiente proyecto [Terraform-Azure-VMs](https://github.com/jruizcampos/terraform-azure-vms) que automatiza el despliegue. También puede utilizar dicho proyecto para guiarse en la configuración inicial de los hosts.
 
@@ -86,9 +86,13 @@ adminUsername    ALL=(ALL)       NOPASSWD: ALL
 ```
 - Personalizar los archivos **hosts** y **master.yaml** de acuerdo a lo indicado en la sección anterior.
 - Ejecutar el playbook de despliegue de Kubernetes:
- `ansible-playbook -i hosts despliegue-kubernetes.yml`
+```bash
+ansible-playbook -i hosts despliegue-kubernetes.yml
+```
 - **(Opcional)** Ejecutar el playbook de despliegue de las aplicaciones de ejemplo:
- `ansible-playbook -i hosts despliegue-aplicacion.yml`
+```bash
+ansible-playbook -i hosts despliegue-aplicacion.yml`
+```
 - También se pueden lanzar ambos playbooks ejecutando el archivo bash **deploy.sh**.
 
 **&copy; 2021 [John Ruiz Campos](https://johnruizcampos.com "John Ruiz Campos")**
