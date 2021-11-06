@@ -8,6 +8,7 @@ Para poder ejecutar el proyecto es necesario tener como mínimo los siguientes h
 - Un servidor de administración: Debe tener Terraform, Ansible y GIT preinstalado. 2 GB RAM, 2 CPU 2.3 Ghz (mínimo)
 - Un servidor master: 2 GB RAM, 2 CPU 2.3 Ghz (mínimo)
 - Uno o más servidores worker: 2 GB RAM, 2 CPU 2.3 Ghz (mínimo)
+- (Opcional) Un servidor NFS: Puede utilizar el servidor master para esta función.
 
 En caso de requerir el despliegue de las máquinas en la nube de Azure, puede utilizar el siguiente proyecto [Terraform-Azure-VMs](https://github.com/jruizcampos/terraform-azure-vms) que automatiza el despliegue. También puede utilizar dicho proyecto para guiarse en la configuración inicial de los hosts.
 
@@ -19,7 +20,7 @@ En caso de requerir el despliegue de las máquinas en la nube de Azure, puede ut
 - **despliegue-kubernetes.yml**: Es el playbook que realiza el despliegue de Kubernetes en sí. 
 - **despliegue-aplicacion.yml**: Este playbook despliega un par de aplicaciones de ejemplo sobre el clúster de Kubernetes ya instalado.
 
-Puede ejecutar los playbooks de manera separada en orden o ejecutar ambos ejecutando el archivo bash **deploy.sh**.
+Puede ejecutar los playbooks de manera separada, en orden o ejecutar ambos ejecutando el archivo bash **deploy.sh**.
 
 ## Archivos a personalizar
 ### Archivo **ansible/hosts**
@@ -65,9 +66,9 @@ sdn: flannel
 # sdn: calico
 ```
 - Variable **pod_network**: Segmento de red para los pods. Podemos dejarla como está o configurarla con un valor personalizado. 
-- Variable **sdn**: Tipo de SDN que se instalará calico o flannel. La elección de una u otra depende del tipo de infraestructura sobre la cual se está realizando la instalación:
-- Si la instalación de Kubernetes es on-premise: Puede usar [calico](https://docs.projectcalico.org/getting-started/kubernetes/quickstart) o [flannel](https://docs.projectcalico.org/getting-started/kubernetes/flannel/flannel), aunque se recomienda Calico por ser más completo y personalizable.
-- Si la instalación de Kubernetes es sobre la nube de Azure: Debe usar flannel, dado que a nivel de red Calico usa ciertos puertos y protocolos que están bloqueados por defecto en Azure.
+- Variable **sdn**: Tipo de SDN que se instalará: calico o flannel. La elección de una u otra depende del tipo de infraestructura sobre la cual se está realizando la instalación:
+- Si la instalación de Kubernetes es on-premise: Puede usar [calico](https://docs.projectcalico.org/getting-started/kubernetes/quickstart) o [flannel](https://docs.projectcalico.org/getting-started/kubernetes/flannel/flannel), aunque se recomienda **Calico** por ser más completo y personalizable.
+- Si la instalación de Kubernetes es sobre maquinas virtuales en la nube de Azure: Debe usar **flannel**, dado que a nivel de red Calico usa ciertos puertos y protocolos que están bloqueados por defecto en Azure.
 
 ## Despliegue
 Realizar los siguientes pasos en el host Ansible:
@@ -78,15 +79,17 @@ Realizar los siguientes pasos en el host Ansible:
 ssh-copy-id -i ~/.ssh/id_rsa.pub adminUsername@10.0.1.21
 ssh-copy-id -i ~/.ssh/id_rsa.pub adminUsername@10.0.1.51
 ```
-- Para los hosts master, workers y nfs, el usuario Linux a usar (en este caso adminUsername) debe estar configurado para realizar el escalado de privilegios **sudo** sin necesidad de ingresar contraseña. Para ello podemos ejecutar **visudo** y agregar las siguientes líneas al final:
+- Para los hosts master, workers y nfs, el usuario Linux a usar (en este caso **adminUsername**) debe estar configurado para realizar el escalado de privilegios **sudo** sin necesidad de ingresar contraseña. Para ello podemos ejecutar **visudo** y agregar las siguientes líneas al final:
 ```bash
 ## Same thing without a password
 adminUsername    ALL=(ALL)       NOPASSWD: ALL
 ```
 - Personalizar los archivos **hosts** y **master.yaml** de acuerdo a lo indicado en la sección anterior.
-- Ejecutar el playbook de despliegue de Kubernetes: `ansible-playbook -i hosts despliegue-kubernetes.yml`
-- **(Opcional)** Ejecutar el playbook de despliegue de las aplicaciones de ejemplo: `ansible-playbook -i hosts despliegue-aplicacion.yml`
-- También puede lanzar ambos playbooks ejecutando el archivo bash **deploy.sh**.
+- Ejecutar el playbook de despliegue de Kubernetes:
+ `ansible-playbook -i hosts despliegue-kubernetes.yml`
+- **(Opcional)** Ejecutar el playbook de despliegue de las aplicaciones de ejemplo:
+ `ansible-playbook -i hosts despliegue-aplicacion.yml`
+- También se pueden lanzar ambos playbooks ejecutando el archivo bash **deploy.sh**.
 
 **&copy; 2021 [John Ruiz Campos](https://johnruizcampos.com "John Ruiz Campos")**
 
