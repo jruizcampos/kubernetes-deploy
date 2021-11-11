@@ -9,7 +9,7 @@ metadata:
 
 spec:
   rules:
-  - host: johnruizcampos.com
+  - host: jruizcampos.com
     http:
       paths:
       - path: /mongodb
