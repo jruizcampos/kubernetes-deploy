@@ -13,10 +13,10 @@ Para poder ejecutar el proyecto es necesario tener como mínimo los siguientes h
 En caso de requerir el despliegue de las máquinas en la nube de Azure, puede utilizar el siguiente proyecto [Terraform-Azure-VMs](https://github.com/jruizcampos/terraform-azure-vms) que automatiza el despliegue. También puede utilizar dicho proyecto para guiarse en la configuración inicial de los hosts.
 
 ## Diagrama de Red de la Infraestructura Kubernetes
-![diagrama de red](https://github.com/jruizcampos/kubernetes-deploy/blob/main/diagrama_de_red.jpg?raw=true)
+![diagrama de red](https://johnruizcampos.com/wp-content/uploads/red_kubernetes_ansible.jpg?raw=true)
 
 ## Estructura del Proyecto Ansible
-![arquitectura ansible](https://github.com/jruizcampos/kubernetes-deploy/blob/main/esquema_playbooks_ansible.jpg?raw=true)
+![arquitectura ansible](https://johnruizcampos.com/wp-content/uploads/proyecto_ansible_kubernetes-1024x391.jpg?raw=true)
 - **despliegue-kubernetes.yml**: Es el playbook que realiza el despliegue de Kubernetes en sí. 
 - **despliegue-aplicacion.yml**: Este playbook despliega un par de aplicaciones de ejemplo sobre el clúster de Kubernetes ya instalado.
 
